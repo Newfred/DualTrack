@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Dual Track</string>
+    <string name="no_sensor">Step counter sensor not detected.</string>
+    <string name="ok">OK</string>
+    <string name="enabled">Enabled</string>
+    <string name="standby_steps">Steps during long standby</string>
+    <string name="during_standby">steps during long standby</string>
+</resources>
