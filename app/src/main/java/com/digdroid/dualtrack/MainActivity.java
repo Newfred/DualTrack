@@ -32,7 +32,6 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
-    private SensorManager sensorManager;
     private boolean isSensorPresent = false;
 
     int GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 111;
@@ -45,17 +44,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
 
-       sensorManager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
+        SensorManager sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
         isSensorPresent = ( sensorManager != null && sensorManager.getDefaultSensor( Sensor.TYPE_STEP_COUNTER ) != null );
-    }
-
-
-    @Override
-    protected void onStart()
-    {
-        super.onStart();
-
     }
 
 
