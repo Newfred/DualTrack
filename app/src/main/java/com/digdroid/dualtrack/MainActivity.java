@@ -89,7 +89,8 @@ public class MainActivity extends AppCompatActivity {
         int standbySteps = store.getStandbySteps();
 
         TextView stepCount = findViewById( R.id.step_count );
-        stepCount.setText( "" + standbySteps + " " + getString( R.string.during_standby ) );
+        //stepCount.setText( "" + standbySteps + " " + getString( R.string.during_standby ) );
+        stepCount.setText( "" + standbySteps + " "+ store.getString( "error", "no error") );
     }
 
 

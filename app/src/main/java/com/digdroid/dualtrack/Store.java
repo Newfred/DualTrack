@@ -55,6 +55,15 @@ public class Store
     }
 
 
+    public void putString( String name, String s )
+    {
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.putString( name, s );
+        editor.apply();
+    }
+
+
 
     public int getInt( String key, int def )
     {
@@ -64,6 +73,7 @@ public class Store
     {
         return preferences.getLong( key, def );
     }
+    public String getString( String key, String def ) { return preferences.getString( key, def ); }
 
 
     public void setShutdownSteps( int steps )
