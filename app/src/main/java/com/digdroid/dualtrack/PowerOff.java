@@ -32,6 +32,8 @@ public class PowerOff extends BroadcastReceiver implements SensorEventListener {
 
             sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
+
+        Sync.sync( context );
     }
 
 

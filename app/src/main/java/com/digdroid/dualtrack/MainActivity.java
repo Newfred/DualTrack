@@ -12,6 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -21,6 +24,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.fitness.Fitness;
+import com.google.android.gms.fitness.FitnessActivities;
 import com.google.android.gms.fitness.FitnessOptions;
 import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.fitness.data.DataSet;
@@ -28,6 +32,8 @@ import com.google.android.gms.fitness.data.DataSource;
 import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.tasks.Task;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
@@ -90,6 +96,57 @@ public class MainActivity extends AppCompatActivity {
 
         TextView stepCount = findViewById( R.id.step_count );
         stepCount.setText( "" + standbySteps + " " + getString( R.string.during_standby ) );
+
+
+        String nextActivity = store.getNextActivity();
+
+        final ArrayList<String> activities = new ArrayList<>();
+        activities.add( "" );
+
+        ArrayList<String> activityNames = new ArrayList<>();
+        activityNames.add( getString( R.string.auto ) );
+
+        int selection = 0;
+
+        Field[] fields = FitnessActivities.class.getFields();
+        for ( Field field : fields )
+            try {
+                String activity = (String) field.get( null );
+                if ( !Character.isUpperCase( activity.charAt(0) ) )
+                {
+                    activities.add( activity );
+                    String activityName = activity.substring(0,1).toUpperCase() + activity.substring(1).replaceAll( "[\\_\\.]", " ");
+                    activityNames.add( activityName );
+
+                    if ( activity.equals( nextActivity ) )
+                        selection = activityNames.size() - 1;
+                }
+            }
+            catch( Exception e ){}
+
+
+
+        Spinner spinner = findViewById( R.id.next_activity );
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>( this, android.R.layout.simple_spinner_item, activityNames );
+        dataAdapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item );
+        spinner.setAdapter( dataAdapter );
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                store.setNextActivity( activities.get( i ) );
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        spinner.setSelection( selection );
+
+
+        Sync.sync( this );
     }
 
 

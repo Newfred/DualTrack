@@ -4,12 +4,18 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 public class Store
 {
     final private static String SHUTDOWN_STEPS = "shutdown_steps";
     final private static String SHUTDOWN_TIME = "shutdown_time";
     final private static String STANDBY_STEPS = "standby_steps";
+    final private static String NEXT_ACTIVITY = "next_activity";
     final private static String ENABLED = "enabled";
+    final private static String SESSIONS = "queued_sessions";
 
     private SharedPreferences preferences;
     private static Store instance = null;
@@ -106,8 +112,47 @@ public class Store
         return getInt( STANDBY_STEPS, 0 );
     }
 
+    public String getNextActivity() { return getString( NEXT_ACTIVITY, "" ); }
+
+    public void setNextActivity( String activity ) { putString( NEXT_ACTIVITY, activity ); }
+
     public boolean isEnabled() { return preferences.getBoolean( ENABLED, false ); }
 
     public void setEnabled( boolean enabled ) { putBoolean( ENABLED, enabled ); }
+
+
+    public synchronized ArrayList<MySession> getSessions()
+    {
+        Set<String> stringSessions = preferences.getStringSet( SESSIONS, new HashSet<String>() );
+
+        ArrayList<MySession> sessions = new ArrayList<>();
+
+        for( String s : stringSessions )
+            sessions.add( new MySession( s ) );
+
+        return sessions;
+    }
+
+    public synchronized void addSession( MySession session )
+    {
+        Set<String> stringSessions = preferences.getStringSet( SESSIONS, new HashSet<String>() );
+        stringSessions.add( session.toString() );
+
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.putStringSet( SESSIONS, stringSessions );
+        editor.apply();
+    }
+
+    public synchronized void removeSession( MySession session )
+    {
+        Set<String> stringSessions = preferences.getStringSet( SESSIONS, new HashSet<String>() );
+        stringSessions.remove( session.toString() );
+
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.putStringSet( SESSIONS, stringSessions );
+        editor.apply();
+    }
 
 }
