@@ -19,7 +19,7 @@ class MySession
         this.startTime = startTime;
         this.endTime = endTime;
 
-        float pace = (float) count / ( (float) (endTime-startTime)*0.95f / 60000f );
+        int pace = getPace();
 
         if ( pace >= RUNNING_PACE )
             activity = FitnessActivities.RUNNING;
@@ -41,6 +41,14 @@ class MySession
         startTime = Long.parseLong( vals[1] );
         endTime = Long.parseLong( vals[2] );
         activity = vals[3];
+    }
+
+    public int getPace()
+    {
+        float t = endTime - startTime - 2*60*1000;
+        if ( t < 0 ) return 0;
+
+        return Math.round( (float) stepCount / ( (t*0.9f) / 60000f ) );
     }
 
     @Override

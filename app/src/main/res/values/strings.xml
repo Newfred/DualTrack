@@ -4,7 +4,9 @@
     <string name="ok">OK</string>
     <string name="enabled">Enabled</string>
     <string name="standby_steps">Long standby</string>
-    <string name="during_standby">steps during last long standby</string>
+    <string name="during_standby">Last long standby</string>
     <string name="auto">Auto</string>
     <string name="next_activity">Next long standby activity:</string>
+    <string name="steps">steps</string>
+    <string name="spm">spm</string>
 </resources>

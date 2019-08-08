@@ -26,6 +26,7 @@ public class PowerOn extends BroadcastReceiver implements SensorEventListener {
 
         store = Store.getInstance(context);
         store.setStandbySteps( 0 );
+        store.setStandbyPace( 0 );
 
         shutdownSteps = store.getShutdownSteps();
         store.setShutdownSteps( -1 );
@@ -58,6 +59,9 @@ public class PowerOn extends BroadcastReceiver implements SensorEventListener {
                 store.setStandbySteps( standbySteps );
 
                 MySession mySession = new MySession( standbySteps, store.getShutdownTime(), Utils.currentTime() );
+
+                store.setStandbyPace( mySession.getPace() );
+
                 if ( !activity.equals( "" ) ) mySession.setActivity( activity );
 
                 store.addSession( mySession );

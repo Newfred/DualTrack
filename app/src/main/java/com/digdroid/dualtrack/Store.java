@@ -13,6 +13,7 @@ public class Store
     final private static String SHUTDOWN_STEPS = "shutdown_steps";
     final private static String SHUTDOWN_TIME = "shutdown_time";
     final private static String STANDBY_STEPS = "standby_steps";
+    final private static String STANDBY_PACE = "standby_pace";
     final private static String NEXT_ACTIVITY = "next_activity";
     final private static String ENABLED = "enabled";
     final private static String SESSIONS = "queued_sessions";
@@ -110,6 +111,16 @@ public class Store
     public int getStandbySteps()
     {
         return getInt( STANDBY_STEPS, 0 );
+    }
+
+    public void setStandbyPace( int pace )
+    {
+        putInt( STANDBY_PACE, pace );
+    }
+
+    public int getStandbyPace()
+    {
+        return getInt( STANDBY_PACE, 0 );
     }
 
     public String getNextActivity() { return getString( NEXT_ACTIVITY, "" ); }

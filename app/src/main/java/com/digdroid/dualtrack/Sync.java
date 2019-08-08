@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Sync {
 
-    static synchronized void sync( Context context )
+    static void sync( Context context )
     {
         new SyncTask( context ).execute();
     }
@@ -45,10 +45,13 @@ class SyncTask extends AsyncTask<Void,Void,Void>
     @Override
     protected Void doInBackground( Void... x )
     {
-        ArrayList<MySession> mySessions = store.getSessions();
+        synchronized ( SyncTask.class )
+        {
+            ArrayList<MySession> mySessions = store.getSessions();
 
-        for ( MySession mySession : mySessions )
-            insertSession( mySession );
+            for (MySession mySession : mySessions)
+                insertSession(mySession);
+        }
 
         return null;
     }
