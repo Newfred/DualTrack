@@ -46,7 +46,7 @@ class MySession
     public int getPace()
     {
         float t = endTime - startTime - 2*60*1000;
-        if ( t < 0 ) return 0;
+        if ( t < 1000 ) return 0;
 
         return Math.round( (float) stepCount / ( (t*0.9f) / 60000f ) );
     }
