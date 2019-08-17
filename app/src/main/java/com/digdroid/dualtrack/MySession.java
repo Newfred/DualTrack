@@ -31,7 +31,6 @@ class MySession
             activity = FitnessActivities.WALKING;
         else
             activity = FitnessActivities.UNKNOWN;
-
     }
 
     MySession( String session )

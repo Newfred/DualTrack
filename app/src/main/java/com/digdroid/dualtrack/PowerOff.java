@@ -14,10 +14,17 @@ public class PowerOff extends BroadcastReceiver implements SensorEventListener {
     private SensorManager sensorManager;
     private Sensor sensor;
     private Store store;
+    private static boolean received = false, stepsRead = false;
 
 
     @Override
-    public void onReceive(Context context, Intent intent) {
+    public void onReceive(Context context, Intent intent)
+    {
+        synchronized ( PowerOff.class )
+        {
+            if ( received ) return;
+            received = true;
+        }
 
         store = Store.getInstance( context );
         store.setShutdownSteps( -1 );
@@ -40,10 +47,16 @@ public class PowerOff extends BroadcastReceiver implements SensorEventListener {
     @Override
     public void onSensorChanged( SensorEvent event ) {
 
-        if ( event != null ) {
-            store.setShutdownSteps( Math.round( event.values[0] ) );
-            store.setShutdownTime( Utils.currentTime() );
+        if (event == null) return;
+
+        synchronized ( PowerOff.class )
+        {
+            if ( stepsRead ) return;
+            stepsRead = true;
         }
+
+        store.setShutdownSteps( Math.round( event.values[0] ) );
+        store.setShutdownTime( Utils.currentTime() );
 
         sensorManager.unregisterListener( this );
     }
